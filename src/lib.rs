@@ -45,7 +45,7 @@ fn build(coll: &str, k : u32) -> KmerVec {
         keys.push(*k);
         vals.push((*v) as f32 / tt_mag);
     }
-    let rep = CsVec::new(4u32.pow(n) as usize, keys, vals);
+    let rep = CsVec::new(4u32.pow(k) as usize, keys, vals);
     return KmerVec {rep : rep};
 }
 
