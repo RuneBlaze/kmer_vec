@@ -6,7 +6,7 @@ use std::ops::Add;
 #[pyclass]
 #[derive(Debug)]
 struct KmerVec {
-    rep: CsVec<f32>,
+    rep: CsVec<f64>,
 }
 
 fn base2num(c: char) -> usize {
@@ -35,15 +35,15 @@ fn build(coll: &str, k: u32) -> KmerVec {
         *counter.entry(key).or_insert(0) += 1;
     }
     let mut keys: Vec<usize> = vec![];
-    let mut vals: Vec<f32> = vec![];
-    let mut tt_mag: f32 = 0.0;
+    let mut vals: Vec<f64> = vec![];
+    let mut tt_mag: f64 = 0.0;
     for (_, v) in counter.iter() {
-        tt_mag += ((*v) as i32).pow(2) as f32;
+        tt_mag += ((*v) as i32).pow(2) as f64;
     }
     tt_mag = tt_mag.sqrt();
     for (k, v) in counter.iter() {
         keys.push(*k);
-        vals.push((*v) as f32 / tt_mag);
+        vals.push((*v) as f64 / tt_mag);
     }
     let rep = CsVec::new(4u32.pow(k) as usize, keys, vals);
     KmerVec { rep: rep }
@@ -60,11 +60,11 @@ impl KmerVec {
     //     KmerVec {rep: CsVec::empty(4u32.pow(k) as usize)}
     // }
 
-    fn similarity(&self, rhs: &KmerVec) -> f32 {
+    fn similarity(&self, rhs: &KmerVec) -> f64 {
         self.rep.dot(&rhs.rep)
     }
 
-    fn similarity_dist(&self, rhs: &KmerVec) -> f32 {
+    fn similarity_dist(&self, rhs: &KmerVec) -> f64 {
         1.0 - self.similarity(rhs)
     }
 }
